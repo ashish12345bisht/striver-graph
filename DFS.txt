@@ -2,6 +2,15 @@
 #include <vector>
 #include <queue>
 using namespace std;
+void dfs(vector<int> &v,  vector<int> adj[], int node){
+    v[node]=1;
+    cout<<node<<" ";
+    for(int i=0;i<adj[node].size();i++){
+        if(!v[adj[node][i]]){
+            dfs(v,adj,adj[node][i]);
+        }
+    }
+}
 int main() {
     int m, n;
     cin>>m>>n;
@@ -20,34 +29,18 @@ int main() {
     //     }
     //     cout<<endl;
     // }
-    queue<int> q;
-    vector<int> v(m+1,0); 
-    q.push(6);//push starting node
-    v[6]=1;//make starting node visited
-    while(!q.empty()){
-        int cur = q.front();
-        q.pop();
-        cout<<cur<<" ";
-        for(int i=0;i<adj[cur].size();i++){
-            int temp = adj[cur][i];
-            if(v[temp]==0){
-                v[temp]=1;
-                q.push(temp);
-            }
-        }
-    }
+    vector<int> v(m+1,0);
+    dfs(v,adj,1);
 }
 
-
-
 //example input
-8 9
+
+8 8
 1 2
-1 6
-2 3
-2 4
-6 7
-6 8
-4 5
+1 3
+2 5
+2 6
+3 4
+3 7
 7 8
-5 8
+4 8
