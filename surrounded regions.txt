@@ -1,0 +1,79 @@
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution{
+public:
+    int delRow[4]={1,0,-1,0};
+    int delCol[4]={0,1,0,-1};
+    void dfs(int row, int col,vector<vector<int>> &v, vector<vector<char>> &mat){
+        v[row][col]=1;
+        for(int i=0;i<4;i++){
+            int r = row+delRow[i];
+            int c = col+delCol[i];
+            if(r>=0 and c>=0 and r<mat.size() and c<mat[0].size() and v[r][c]==0 and mat[r][c]=='O'){
+                dfs(r,c,v,mat);
+            }
+        }
+    }
+    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat)
+    {
+        // code here
+        vector<vector<int>> v(n,vector<int> (m,0));
+        for(int i=0;i<m;i++){
+            if(!v[0][i] && mat[0][i]=='O'){
+                dfs(0,i,v,mat);
+            }
+            if(!v[n-1][i] && mat[n-1][i]=='O'){
+                dfs(n-1,i,v,mat);
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(!v[i][0] && mat[i][0]=='O'){
+                dfs(i,0,v,mat);
+            }
+            if(!v[i][m-1] && mat[i][m-1]=='O'){
+                dfs(i,m-1,v,mat);
+            }
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(!v[i][j] && mat[i][j]=='O'){
+                    mat[i][j]='X';
+                }
+            }
+        }
+        return mat;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n, m;
+        cin>>n>>m;
+        vector<vector<char>> mat(n, vector<char>(m, '.'));
+        for(int i = 0;i < n;i++)
+            for(int j=0; j<m; j++)
+                cin>>mat[i][j];
+        
+        Solution ob;
+        vector<vector<char>> ans = ob.fill(n, m, mat);
+        for(int i = 0;i < n;i++) {
+            for(int j = 0;j < m;j++) {
+                cout<<ans[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+    }
+    return 0;
+}
+// } Driver Code Ends
