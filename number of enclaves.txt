@@ -1,0 +1,87 @@
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    int delRow[4]={-1,0,1,0};
+    int delCol[4]={0,-1,0,1};
+    void bfs(int row, int col, vector<vector<int>> &grid,vector<vector<int>> &v){
+        queue<pair<int,int>> q;
+        q.push({row,col});
+        v[row][col]=1;
+        while(!q.empty()){
+            int r = q.front().first;
+            int c = q.front().second;
+            q.pop();
+            for(int i=0;i<4;i++){
+                int nR = r+delRow[i];
+                int nC = c+delCol[i];
+                if(nR>=0 and nC>=0 and nR<grid.size() and nC<grid[0].size() and !v[nR][nC] and grid[nR][nC]==1){
+                    v[nR][nC]=1;
+                    q.push({nR,nC});
+                }
+            }      
+        }
+    }
+    int numberOfEnclaves(vector<vector<int>> &grid) {
+        // Code here
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> v(m,vector<int> (n,0));
+        for(int i=0;i<m;i++){
+            if(grid[i][0]==1){
+                bfs(i,0,grid,v);
+            }
+            if(grid[i][n-1]==1){
+                bfs(i,n-1,grid,v);
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(grid[0][i]==1){
+                bfs(0,i,grid,v);
+            }
+            if(grid[m-1][i]==1){
+                bfs(m-1,i,grid,v);
+            }
+        }
+        int count = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(v[i][j]==0 and grid[i][j]==1){
+                    // bfs(i,j,grid,v);
+                    // cout<<i<<j<<endl;
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<int>> grid(n, vector<int>(m));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cin >> grid[i][j];
+            }
+        }
+        Solution obj;
+        cout << obj.numberOfEnclaves(grid) << endl;
+    }
+}
+// } Driver Code Ends
